@@ -4,6 +4,8 @@
 每天 22:00 UTC
 
 ## 已覆盖的驱动清单
+- Lilu
+- VoodooInput
 - AirportBrcmFixup
 - AppleALC
 - BrightnessKeys
