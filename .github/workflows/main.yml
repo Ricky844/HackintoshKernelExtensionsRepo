@@ -109,7 +109,10 @@ jobs:
           if [ -e build/Release/*.zip ]; then
             cp -f build/*/*.zip ../release/${plugin%,*}
           else
-            cp -Rf build/*/*.kext ../
+            mkdir -p ../release/${plugin%,*}/Debug
+            mkdir -p ../release/${plugin%,*}/Release
+            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
+            cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
             touch ../release/${plugin%,*}/BUILDZIPFAILED
           fi
           cd ../
@@ -133,19 +136,16 @@ jobs:
           cd ${plugin%,*}
           if [[ "${plugin%,*}" == "IntelMausi" ]] ; then
             cp -r ../MacKernelSDK .
-          fi
-          if [[ "${plugin%,*}" == "LucyRTL8125Ethernet" ]] ; then
-            xcodebuild CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -configuration Debug
-            xcodebuild CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -configuration Release
-          else
             xcodebuild -configuration Debug
             xcodebuild -configuration Release
-          fi
-          if [ -e build/Release/*.zip ]; then
             cp -Rf build/*/*.zip ../release/${plugin%,*}
           else
-            cp -Rf build/*/*.kext ../
-            touch ../release/${plugin%,*}/BUILDZIPFAILED
+            xcodebuild -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            xcodebuild -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            mkdir -p ../release/${plugin%,*}/Debug
+            mkdir -p ../release/${plugin%,*}/Release
+            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
+            cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
         done
@@ -165,10 +165,14 @@ jobs:
           cp -r ../MacKernelSDK .
           xcodebuild -configuration Debug -target Package
           xcodebuild -configuration Release -target Package
-          if [ -e build/Release/*.zip ] ; then
-            cp -Rf build/*/*/*.zip ../release/${plugin%,*}
+          if [ -e build/Products/Release/*.zip ] ; then
+            cp -Rf build/Products/Debug/*.zip ../release/${plugin%,*}
+            cp -Rf build/Products/Release/*.zip ../release/${plugin%,*}
           else
-            cp -Rf build/*/*/*.kext ../
+            mkdir -p ../release/${plugin%,*}/Debug
+            mkdir -p ../release/${plugin%,*}/Release
+            cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
+            cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
             touch ../release/${plugin%,*}/BUILDZIPFAILED
           fi
           cd ../
@@ -185,17 +189,21 @@ jobs:
         for plugin in ${inputPlugins[*]}; do
           echo "===================> Building ${plugin%,*} "
           mkdir -p release/${plugin%,*}
-          git clone ${plugin##*,} ${plugin%,*} --recursive
+          git clone -q ${plugin##*,} ${plugin%,*} --recursive
           cd ${plugin%,*}
           if [[ "${plugin%,*}" == "VoodooPS2" ]] ; then
             cp -r ../MacKernelSDK .
             src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh) && eval "$src"
             xcodebuild -configuration Debug > /dev/null 2>&1
             xcodebuild -configuration Release > /dev/null 2>&1
-            if [ -e build/Release/*.zip ] ; then
-              cp -f build/*/*/*.zip ../release/${plugin%,*}
+            if [ -e build/Products/Release/*.zip ] ; then
+              cp -f build/Products/Debug/*.zip ../release/${plugin%,*}
+              cp -f build/Products/Release/*.zip ../release/${plugin%,*}
             else
-              cp -Rf build/*/*/*.kext ../
+              mkdir -p ../release/${plugin%,*}/Debug
+              mkdir -p ../release/${plugin%,*}/Release
+              cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
+              cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
               touch ../release/${plugin%,*}/BUILDZIPFAILED
             fi
           else
@@ -207,15 +215,11 @@ jobs:
             export PATH=~/Library/Python/2.7/bin:$PATH
             git submodule init && git submodule update
             xcodebuild -workspace "VoodooI2C.xcworkspace" -scheme "VoodooI2C" -sdk macosx10.12 -derivedDataPath build clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            if [ -e build/Build/Products/Release/*.zip ] ; then
-              cd build/Build/Products/Release
-              zip -r VoodooI2C-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.kext
-              zip -r VoodooI2C-Debug-Symbols-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.dSYM
-              cd -
-              cp build/Build/Products/Release/*.zip ../release/${plugin%,*}/
-            else
-              touch ../release/${plugin%,*}/BUILDZIPFAILED
-            fi
+            cd build/Build/Products/Release
+            zip -r VoodooI2C-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.kext
+            zip -r VoodooI2C-Debug-Symbols-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.dSYM
+            cd -
+            cp build/Build/Products/Release/*.zip ../release/${plugin%,*}/
           fi
           cd ../
         done
