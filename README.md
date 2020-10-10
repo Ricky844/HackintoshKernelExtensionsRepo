@@ -37,3 +37,10 @@
 - 仓库中的编译结果全部是自动生成的，未经任何测试。
 - 本人不对仓库中的任何编译结果负责。
 - 请自行承担使用本仓库编译结果的一切后果！
+
+## Release 下载
+
+***请将 `$(date)` 改为你想下载的构建日期，`CloudFlare` 加速链接可以直接用迅雷或 `Motrix` 等支持直链加速下载的工具下载，建议境内用户使用 `CloudFlare` 加速链接下载。***
+
+- 境外用户: [https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/$(date)/$(date).zip]()
+- `CloudFlare` 加速链接: [https://github.tlhub.cn/https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/$(date)/$(date).zip]()
