@@ -74,8 +74,10 @@ jobs:
           if [ -e build/Release/*.zip ]; then
             cp -f build/*/*.zip ../release/${plugin%,*}
           else
-            cp -Rf build/*/*.kext ../
-            touch ../release/${plugin%,*}/BUILDZIPFAILED
+            mkdir -p ../release/${plugin%,*}/Debug
+            mkdir -p ../release/${plugin%,*}/Release
+            cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
+            cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           fi
           cd ../
         done
@@ -113,7 +115,6 @@ jobs:
             mkdir -p ../release/${plugin%,*}/Release
             cp -Rf build/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
-            touch ../release/${plugin%,*}/BUILDZIPFAILED
           fi
           cd ../
         done
@@ -173,7 +174,6 @@ jobs:
             mkdir -p ../release/${plugin%,*}/Release
             cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
             cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
-            touch ../release/${plugin%,*}/BUILDZIPFAILED
           fi
           cd ../
         done
@@ -204,7 +204,6 @@ jobs:
               mkdir -p ../release/${plugin%,*}/Release
               cp -Rf build/Products/Debug/*.kext ../release/${plugin%,*}/Debug
               cp -Rf build/Products/Release/*.kext ../release/${plugin%,*}/Release
-              touch ../release/${plugin%,*}/BUILDZIPFAILED
             fi
           else
             curl -L https://github.com/alexey-lysiuk/macos-sdk/releases/download/10.12/MacOSX10.12.tar.bz2 -o /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.tar.bz2 && tar -xjf /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.tar.bz2 -C /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
