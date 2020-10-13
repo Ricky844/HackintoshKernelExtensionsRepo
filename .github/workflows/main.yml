@@ -247,8 +247,8 @@ jobs:
         cd IntelBluetoothFirmware && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
         xcodebuild -alltargets -configuration Debug | xcpretty
         xcodebuild -alltargets -configuration Release | xcpretty
-        cp build/Build/Products/Debug/*  ../release/IntelBluetoothFirmware/Debug/
-        cp build/Build/Products/Release/*  ../release/IntelBluetoothFirmware/Release/
+        cp -Rf build/Debug/*.kext  ../release/IntelBluetoothFirmware/Debug/
+        cp -Rf build/Release/*  ../release/IntelBluetoothFirmware/Release/
         cd ..
         
         ## Package
