@@ -226,7 +226,7 @@ jobs:
         ### Itlwm
         mkdir -p release/itlwm
         git clone -q https://github.com/OpenIntelWireless/itlwm --depth=5
-        cd itlwm && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1 && cd ..
+        cd itlwm && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
         xcodebuild -scheme itlwm -configuration Debug -derivedDataPath build | xcpretty
         xcodebuild -scheme "AirportItlwm (all)" -configuration Debug -derivedDataPath build | xcpretty
         eval $(grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " ")
@@ -244,7 +244,7 @@ jobs:
         mkdir -p release/IntelBluetoothFirmware/Debug
         mkdir -p release/IntelBluetoothFirmware/Release
         git clone -q https://github.com/OpenIntelWireless/IntelBluetoothFirmware.git
-        cd IntelBluetoothFirmware && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1 && cd ..
+        cd IntelBluetoothFirmware && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
         xcodebuild -alltargets -configuration Debug | xcpretty
         xcodebuild -alltargets -configuration Release | xcpretty
         cp build/Build/Products/Debug/*  ../release/IntelBluetoothFirmware/Debug/
