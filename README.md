@@ -34,6 +34,8 @@
 - BrcmPatchRAM
 - VoodooPS2
 - VoodooI2C
+- itlwm
+- IntelBluetoothFirmware
 
 ## 声明
 - 仓库中的编译结果全部是自动生成的，未经任何测试。
