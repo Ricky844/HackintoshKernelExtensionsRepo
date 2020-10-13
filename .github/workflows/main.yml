@@ -229,8 +229,7 @@ jobs:
         cd itlwm && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
         xcodebuild -scheme itlwm -configuration Debug -derivedDataPath build | xcpretty
         xcodebuild -scheme "AirportItlwm (all)" -configuration Debug -derivedDataPath build | xcpretty
-        eval $(grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " ")
-        echo "::set-env name=ITLWM_VER::$MODULE_VERSION"
+        ITLWM_VER=$(grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " " | awk -F '=' '{print $2}')
         cd build/Build/Products/Debug
         zip -r itlwm-v${ITLWM_VER}-DEBUG-alpha.zip itlwm.kext
         while read -r tgt ; do
