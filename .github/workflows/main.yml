@@ -184,7 +184,7 @@ jobs:
         echo "==========================================================================="
         inputPlugins=(
           'VoodooPS2,https://github.com/acidanthera/VoodooPS2'
-          'VoodooI2C,https://github.com/VoodooI2C/VoodooI2C'
+          #'VoodooI2C,https://github.com/VoodooI2C/VoodooI2C'
         )
         for plugin in ${inputPlugins[*]}; do
           echo "===================> Building ${plugin%,*} "
@@ -222,6 +222,12 @@ jobs:
           fi
           cd ../
         done
+        
+        # VoodooI2C
+        brew install wget
+        curl -s https://api.github.com/repos/voodooi2c/voodooi2c/releases/latest | grep browser_download_url | awk -F '"' '{print $4}' | xargs wget
+        mkdir -p release/VoodooI2C
+        mv Voodoo*.zip release/VoodooI2C/
         
         ### Itlwm
         mkdir -p release/itlwm
