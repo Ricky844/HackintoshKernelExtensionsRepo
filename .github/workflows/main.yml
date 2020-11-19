@@ -17,7 +17,7 @@ jobs:
     - name: Package
       run: |
         ## Basic Env
-        echo ::set-env name=TAGNAME::"$(date +%Y-%m-%d)"
+        echo "TAGNAME=$(date +%Y-%m-%d)" >> $GITHUB_ENV
         mkdir -p release/Lilu
         mkdir -p release/VoodooInput
         git clone -q https://github.com/acidanthera/MacKernelSDK.git
