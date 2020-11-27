@@ -319,10 +319,7 @@ steps:
     script: |
       #!/bin/bash
       zip -qry -FS $(date +%Y-%m-%d).zip release
-      pwd
       cp *.zip $(Build.ArtifactStagingDirectory)
-      echo "ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
-      ls $(Build.ArtifactStagingDirectory)
 
 - task: GitHubRelease@0
   displayName: 'Publish GitHub Release'
