@@ -319,6 +319,8 @@ steps:
     script: |
       #!/bin/bash
       zip -qry -FS $(date +%Y-%m-%d).zip release
+      pwd
+      ls $(Build.ArtifactStagingDirectory)/*
 
 - task: GitHubRelease@0
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['BuildCheck'], 'True'))
