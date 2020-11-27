@@ -320,19 +320,18 @@ steps:
       #!/bin/bash
       zip -qry -FS $(date +%Y-%m-%d).zip release
       pwd
-      ls $(Build.ArtifactStagingDirectory)/*
+      cp *.zip $(Build.ArtifactStagingDirectory)
+      echo "ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
+      ls $(Build.ArtifactStagingDirectory)
 
 - task: GitHubRelease@0
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['BuildCheck'], 'True'))
   displayName: 'Publish GitHub Release'
   inputs:
     gitHubConnection: release
-    repositoryName: '$(Build.Repository.Name)'
-    action: 'edit'
+    repositoryName: athlonreg/HackintoshKernelExtensionsRepo
+    action: edit
     target: '$(Build.SourceVersion)'
-    tagSource: 'manual'
     tag: '$(BuildDate)'
     title: '$(BuildDate)'
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
-    addChangeLog: false
     isPreRelease: true
