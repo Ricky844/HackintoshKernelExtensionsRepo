@@ -1,7 +1,7 @@
 # Hackintosh Kernel Extensions Repo
 
 ## 构建时间
-每天 22:00 UTC
+每天 22:00 UTC | [![Build Status](https://dev.azure.com/15563836030/HackintoshKernelExtensionsRepo/_apis/build/status/athlonreg.HackintoshKernelExtensionsRepo?branchName=main)](https://dev.azure.com/15563836030/HackintoshKernelExtensionsRepo/_build/latest?definitionId=11&branchName=main)
 
 ## 已覆盖的驱动清单
 - Lilu
@@ -47,4 +47,6 @@
 ***请将 `$(date)` 改为你想下载的构建日期，`CloudFlare` 加速链接可以直接用迅雷或 `Motrix` 等支持直链加速下载的工具下载，建议境内用户使用 `CloudFlare` 加速链接下载。***
 
 - 境外用户: [https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/$(date)/$(date).zip]()
+  - 示例：https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/2020-11-29/2020-11-29.zip
 - `CloudFlare` 加速链接: [https://github.tlhub.cn/https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/$(date)/$(date).zip]()
+  - 示例：https://github.tlhub.cn/https://github.com/athlonreg/HackintoshKernelExtensionsRepo/releases/download/2020-11-29/2020-11-29.zip
