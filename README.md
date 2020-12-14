@@ -14,6 +14,7 @@
 - DebugEnhancer
 - HibernationFixup
 - NVMeFix
+- RestrictEvents
 - RTCMemoryFixup
 - VirtualSMC
 - WhateverGreen
