@@ -291,5 +291,5 @@ jobs:
     - name: Publish GitHub Release
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: ${{ env.BuildDate })
-        path: ${{ env.date +%Y-%m-%d }}.zip
+        name: $(BuildDate)
+        path: $(date +%Y-%m-%d).zip
