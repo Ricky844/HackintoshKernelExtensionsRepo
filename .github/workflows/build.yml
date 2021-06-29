@@ -73,7 +73,7 @@ jobs:
       run: |
         #!/bin/bash
         zip -qry -FS $(date +%Y-%m-%d ).zip release
-        cp *.zip ${{ github.workspace }}
+        cp -p -f -r *.zip ${{ github.workspace }}
       shell: bash
     - name: Publish GitHub Release
       uses: actions/upload-artifact@v2.2.4
