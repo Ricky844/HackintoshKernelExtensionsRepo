@@ -15,7 +15,7 @@ jobs:
     - name: Lilu Basic Dependency
       run: |
         #!/bin/bash
-        BD="${{ env.date +"%Y-%m-%d" }}"
+        BD="$(date +"%Y-%m-%d")"
         echo "##vso[task.setvariable variable=BuildDate]$BD"
         mkdir -p release/Lilu
         mkdir -p release/VoodooInput
@@ -104,7 +104,7 @@ jobs:
         for plugin in ${otherMaintainLiluPlugins[*]}; do
           echo "===================> Building ${plugin%,*} "
           which wget || brew install wget
-          addr=${{ env.echo ${plugin##*,} | awk -F '/' '{print $4"/"$5}' | sed 's/.git//g' }}
+          addr=$(echo ${plugin##*,}  | awk -F '/' '{print $4"/"$5}' | sed 's/.git//g')
           mkdir -p release/${plugin%,*}
           # git clone -q ${plugin##*,} ${plugin%,*} -b master --depth=1
           # cd ${plugin%,*}
@@ -123,7 +123,7 @@ jobs:
           #   cp -Rf build/Release/*.kext ../release/${plugin%,*}/Release
           # fi
           cd release/${plugin%,*}
-          for i in ${{ env.curl https://api.github.com/repos/${addr}/releases/latest | grep browser_download_url | awk -F '"' '{print $4}' }}
+          for i in $(curl https://api.github.com/repos/${addr}/releases/latest | grep browser_download_url | awk -F '"' '{print $4}')
           do
             wget $i
           done
@@ -210,7 +210,7 @@ jobs:
           cd ${plugin%,*}
           if [[ "${plugin%,*}" == "VoodooPS2" ]] ; then
             cp -r ../MacKernelSDK .
-            src=${{ env./usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh }} && eval "$src"
+            src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh) && eval "$src"
             xcodebuild -configuration Debug > /dev/null 2>&1
             xcodebuild -configuration Release > /dev/null 2>&1
             if [ -e build/Products/Release/*.zip ] ; then
@@ -224,7 +224,7 @@ jobs:
             fi
           else
             curl -L https://github.com/alexey-lysiuk/macos-sdk/releases/download/10.12/MacOSX10.12.tar.bz2 -o /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.tar.bz2 && tar -xjf /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.tar.bz2 -C /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
-            src=${{ env./usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh }} && eval "$src" && mv VoodooInput Dependencies
+            src=$(/usr/bin/curl -Lfs https://raw.githubusercontent.com/acidanthera/VoodooInput/master/VoodooInput/Scripts/bootstrap.sh) && eval "$src" && mv VoodooInput Dependencies
             pip install cpplint
             pip install git+https://github.com/alexandred/cldoc.git
             echo 'export PATH=~/Library/Python/2.7/bin:$PATH' >> ~/.bashrc
@@ -232,8 +232,8 @@ jobs:
             git submodule init && git submodule update
             xcodebuild -workspace "VoodooI2C.xcworkspace" -scheme "VoodooI2C" -sdk macosx10.12 -derivedDataPath build clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             cd build/Build/Products/Release
-            zip -r VoodooI2C-${{ env./usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist" }}.zip *.kext
-            zip -r VoodooI2C-Debug-Symbols-${{ env./usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist" }}.zip *.dSYM
+            zip -r VoodooI2C-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.kext
+            zip -r VoodooI2C-Debug-Symbols-$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "VoodooI2C.kext/Contents/info.plist").zip *.dSYM
             cd -
             cp build/Build/Products/Release/*.zip ../release/${plugin%,*}/
           fi
@@ -245,7 +245,7 @@ jobs:
         #!/bin/bash
         which wget || brew install wget
         mkdir -p release/VoodooI2C && cd release/VoodooI2C
-        for i in ${{ env.curl -s https://api.github.com/repos/voodooi2c/voodooi2c/releases/latest | grep browser_download_url | awk -F '"' '{print $4}' }}
+        for i in $(curl -s https://api.github.com/repos/voodooi2c/voodooi2c/releases/latest | grep browser_download_url | awk -F '"' '{print $4}')
         do 
           wget $i
         done
@@ -259,7 +259,7 @@ jobs:
         cd itlwm && git clone -q https://github.com/acidanthera/MacKernelSDK.git --depth=1
         xcodebuild -scheme itlwm -configuration Debug -derivedDataPath build | xcpretty
         xcodebuild -scheme "AirportItlwm (all)" -configuration Debug -derivedDataPath build | xcpretty
-        ITLWM_VER=${{ env.grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " " | awk -F '=' '{print $2}' }}
+        ITLWM_VER=$(grep -m 1 "MODULE_VERSION =" itlwm.xcodeproj/project.pbxproj | tr -d ';' | tr -d '\t' | tr -d " " | awk -F '=' '{print $2}')
         cd build/Build/Products/Debug
         zip -r itlwm-v${ITLWM_VER}-DEBUG-alpha.zip itlwm.kext
         while read -r tgt ; do
@@ -285,11 +285,11 @@ jobs:
     - name: Package
       run: |
         #!/bin/bash
-        zip -qry -FS ${{ env.date +%Y-%m-%d }}.zip release
+        zip -qry -FS $(date +%Y-%m-%d ).zip release
         cp *.zip ${{ github.workspace }}
       shell: bash
     - name: Publish GitHub Release
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: ${{ env.BuildDate }}
+        name: ${{ env.BuildDate }
         path: ${{ env.date +%Y-%m-%d }}.zip
